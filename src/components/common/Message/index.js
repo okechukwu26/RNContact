@@ -9,6 +9,7 @@ const Index = ({
   primary,
   danger,
   grey,
+  info,
   retry,
   retryFn,
   onDismiss,
@@ -20,6 +21,9 @@ const Index = ({
     }
     if (primary) {
       return color.primary;
+    }
+    if (info) {
+      return color.info;
     }
     if (danger) {
       return color.danger;

@@ -16,7 +16,7 @@ export const SignUp = ({
   firstName,
   lastName,
   userName,
-}) => async dispatch => {
+}) => dispatch => async onSuccess => {
   try {
     dispatch({type: REGISTER_LOADING});
     const data = await axiosInstance.post('/contactAuth/signup', {
@@ -27,8 +27,8 @@ export const SignUp = ({
       userName,
     });
     dispatch({type: REGISTER_SUCCESS, payload: data.data});
+    onSuccess(data.data);
   } catch (error) {
-    console.log(error, error.response);
     dispatch({
       type: REGISTER_FAIL,
       payload: error.response

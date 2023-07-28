@@ -1,29 +1,36 @@
-import react, {useEffect} from 'react';
-import {Text, TouchableOpacity} from 'react-native';
-import style from './style';
+import react, {useContext, useEffect, useState} from 'react';
+import Icon from '../../components/common/Icon';
 import Container from '../../components/common';
-import {useNavigation} from '@react-navigation/native';
+import styles from './style';
+import ContactComponent from '../../components/common/ContactComponent';
+
+import {GlobalContext} from '../../context/provider';
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import color from '../../assets/theme/color';
 
 const Contacts = () => {
-  const {setOptions, toggleDrawer} = useNavigation();
-
-  useEffect(() => {
-    setOptions({
-      headerShown: false,
-      headerLeft: () => {
-        <TouchableOpacity
-          onPress={() => {
-            toggleDrawer();
-          }}
-        >
-          <Text style={{padding: 10, color: '#000'}}>Nav</Text>
-        </TouchableOpacity>;
-      },
-    });
-  }, []);
+  const [modalVisible, setModalVisible] = useState(false);
+  const {
+    contactsState: {
+      getContacts: {data, loading},
+    },
+    contactDispatch,
+  } = useContext(GlobalContext);
   return (
-    <Container>
-      <Text style={style.text}>hi from Contacts</Text>
+    <Container style={{backgroundColor: '#000'}}>
+      <ContactComponent
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        data={data}
+        loading={loading}
+        dispatch={contactDispatch}
+      />
     </Container>
   );
 };

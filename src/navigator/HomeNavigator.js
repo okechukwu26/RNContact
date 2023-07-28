@@ -24,7 +24,7 @@ const HomeNavigator = () => {
 
   return (
     <HomeStack.Navigator>
-      <HomeStack.Screen name="Contact" component={Contacts}></HomeStack.Screen>
+      <HomeStack.Screen name="Contacts" component={Contacts}></HomeStack.Screen>
       <HomeStack.Screen
         name={CONTACT_DETAILS}
         component={ContactsDetail}

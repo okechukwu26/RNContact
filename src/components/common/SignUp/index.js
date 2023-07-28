@@ -6,13 +6,14 @@ import CustomButton from '../CustomButton';
 import styles from './style';
 import {LOGIN} from '../../../constants/routeName';
 import {useNavigation} from '@react-navigation/native';
-import color from '../../../assets/theme/color';
+import Icon from '../Icon';
 import Message from '../Message';
 const RegisterComponent = ({errors, error, loading, onSubmit, onChange}) => {
   const {navigate} = useNavigation();
+  const [secure, isSecure] = useState(false);
 
   return (
-    <Container>
+    <Container style={{backgroundColor: '#000'}}>
       <Image
         source={require('../../../assets/images/logo.png')}
         style={styles.logoImage}
@@ -55,7 +56,20 @@ const RegisterComponent = ({errors, error, loading, onSubmit, onChange}) => {
           }}
           label="password"
           error={errors.password}
-          icon={<Text>Show</Text>}
+          icon={
+            <TouchableOpacity
+              onPress={() => {
+                isSecure(prev => !prev);
+              }}
+            >
+              {secure ? (
+                <Icon type="fontAwesome5" name="eye" size={20} />
+              ) : (
+                <Icon type="fontAwesome5" name="eye-slash" size={20} />
+              )}
+            </TouchableOpacity>
+          }
+          secureTextEntry={secure}
           iconPosition="right"
         />
 
