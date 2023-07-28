@@ -12,12 +12,13 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async config => {
-    // const token = await AsyncStorage.getItem('token');
-    // if (token) {
-    config.headers.Authorization = 'token';
+    const token = await AsyncStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = token;
 
+      return config;
+    }
     return config;
-    //}
   },
   error => {
     return Promise.reject(error);

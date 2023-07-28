@@ -1,4 +1,4 @@
-import react, {useState, useContext, useEffect, useCallback} from 'react';
+import react, {useState, useContext, useCallback} from 'react';
 import env from '../../config/env';
 import {SignUp, clearAuthState} from '../../context/actions/auth/register';
 import RegisterComponent from '../../components/common/SignUp';
@@ -17,11 +17,6 @@ const Register = () => {
 
   const {navigate} = useNavigation();
 
-  useEffect(() => {
-    if (data) {
-      navigate(LOGIN);
-    }
-  }, [data]);
   useFocusEffect(
     useCallback(() => {
       return () => {
@@ -90,7 +85,9 @@ const Register = () => {
       Object.values(form).every(item => item.trim().length > 0) &&
       Object.values(errors).every(item => !item)
     ) {
-      SignUp(form)(authDispatch);
+      SignUp(form)(authDispatch)(response => {
+        navigate(LOGIN, {data: response});
+      });
     }
   };
   return (

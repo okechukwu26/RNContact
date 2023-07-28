@@ -1,45 +1,57 @@
 import React from 'react';
-import {Image, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+} from 'react-native';
 import Container from '../../components/common';
 import styles from './styles';
 import color from '../../assets/theme/color';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {LOGIN, SETTINGS} from '../../constants/routeName';
+import Icon from '../../components/common/Icon';
+import {SETTINGS} from '../../constants/routeName';
+import {LogoutUser} from '../../context/actions/auth/logout';
 
-const Index = ({navigation}) => {
+const Index = ({navigation, dispatch}) => {
+  const handleLogOut = () => {
+    navigation.toggleDrawer();
+    Alert.alert('Logout!', 'Are you sure you want to logout', [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+      },
+      {
+        text: 'Ok',
+        onPress: () => {
+          LogoutUser()(dispatch);
+        },
+      },
+    ]);
+  };
   const MenuItem = [
     {
-      icon: <Text style={styles.itemText}>T</Text>,
+      icon: (
+        <Icon type="fontisto" color="#000" name="player-settings" size={17} />
+      ),
       name: 'Settings',
       onPress: () => {
         navigation.navigate(SETTINGS);
       },
     },
     {
-      icon: <Text style={styles.itemText}>T</Text>,
+      icon: <Icon type="material" color="#000" name="logout" size={17} />,
       name: 'Logout',
-      onPress: () => {
-        
+      onPress: ({navigation}) => {
+        handleLogOut(navigation);
       },
     },
   ];
-  const sqr = () => {
-    let total = 0;
-    const num = [3, 4];
-    for (let i = 0; i < num.length; i++) {
-      total += num[i] * num[i];
-    }
-    console.log(total);
-  };
-  const logOut = async () => {
-    console.log('hello');
-    await AsyncStorage.removeItem('user');
-    navigation.navigate(LOGIN);
-  };
 
   return (
     <SafeAreaView>
-      <Container style={{backgroundColor: color.white}}>
+      <Container style={{backgroundColor: color.white, height: '100vh'}}>
         <View>
           <Image
             source={require('../../assets/images/logo.png')}
@@ -52,7 +64,7 @@ const Index = ({navigation}) => {
               <TouchableOpacity
                 key={name}
                 style={styles.item}
-                onPress={() => onPress()}
+                onPress={() => onPress(navigation)}
               >
                 {icon}
                 <Text style={styles.itemText}>{name}</Text>

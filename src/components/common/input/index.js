@@ -7,6 +7,7 @@ const Input = ({
   onChangeText,
   name,
   error,
+  type,
   iconPosition,
   style,
   value,
@@ -29,7 +30,7 @@ const Input = ({
       return color.danger;
     }
     if (focused) {
-      return color.grey;
+      return color.info;
     } else {
       return color.secondary;
     }
@@ -46,6 +47,7 @@ const Input = ({
         <View>{icon && icon}</View>
         <TextInput
           style={[styles.input]}
+          inputMode={type}
           onChangeText={text => onChangeText(text)}
           value={value}
           onFocus={() => setFocused(true)}

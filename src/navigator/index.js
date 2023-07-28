@@ -7,11 +7,11 @@ import {GlobalContext} from '../context/provider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ActivityIndicator} from 'react-native';
 const AppNavContainer = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [authLoaded, setAuthLoaded] = useState(false);
   const {
     authState: {isLoggedIn},
   } = useContext(GlobalContext);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authLoaded, setAuthLoaded] = useState(false);
 
   const getUser = async () => {
     const user = await AsyncStorage.getItem('user');
@@ -26,16 +26,13 @@ const AppNavContainer = () => {
   };
   useEffect(() => {
     getUser();
-  }, []);
+  }, [isLoggedIn]);
+
   return (
     <>
-      {authLoaded ? (
+      {isLoggedIn || authLoaded ? (
         <NavigationContainer>
-          {isLoggedIn || isAuthenticated ? (
-            <DrawerNavigator />
-          ) : (
-            <AuthNavigator />
-          )}
+          {isAuthenticated ? <DrawerNavigator /> : <AuthNavigator />}
         </NavigationContainer>
       ) : (
         <ActivityIndicator />

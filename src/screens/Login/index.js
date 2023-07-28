@@ -2,10 +2,21 @@ import react, {useContext, useEffect, useState} from 'react';
 import LoginComponent from '../../components/common/Login';
 import {GlobalContext} from '../../context/provider';
 import {Signin} from '../../context/actions/auth/signin';
+import {useRoute} from '@react-navigation/native';
 
 const Login = () => {
   const [form, setForm] = useState({});
   const [errors, setErrors] = useState({});
+  const [justSignedUp, setJustSignedUp] = useState(false);
+
+  const {params} = useRoute();
+
+  useEffect(() => {
+    if (params?.data) {
+      setJustSignedUp(true);
+      setForm(prev => ({...prev, email: params.data.data.email}));
+    }
+  }, [params]);
 
   const {
     authState: {error, loading, data},
@@ -13,6 +24,7 @@ const Login = () => {
   } = useContext(GlobalContext);
 
   const onChange = ({name, value}) => {
+    setJustSignedUp(false);
     setForm(prev => {
       return {...prev, [name]: value};
     });
@@ -70,6 +82,7 @@ const Login = () => {
       onSubmit={onSubmit}
       loading={loading}
       form={form}
+      justSignedUp={justSignedUp}
     />
   );
 };

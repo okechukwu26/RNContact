@@ -1,5 +1,5 @@
 import {View, Text, Image, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import Container from '..';
 import Input from '../input';
 import CustomButton from '../CustomButton';
@@ -7,11 +7,24 @@ import Message from '../Message';
 import styles from './style';
 import {REGISTER} from '../../../constants/routeName';
 import {useNavigation} from '@react-navigation/native';
-const LoginComponent = ({error, errors, onChange, onSubmit, loading}) => {
+import Icon from '../Icon';
+const LoginComponent = ({
+  error,
+  justSignedUp,
+  form,
+  errors,
+  onChange,
+  onSubmit,
+  loading,
+}) => {
   const {navigate} = useNavigation();
-  console.log(error);
+  const [secure, isSecure] = useState(true);
+
+  const changeSecure = () => {
+    isSecure(prev => !prev);
+  };
   return (
-    <Container>
+    <Container style={{backgroundColor: '#000'}}>
       <Image
         source={require('../../../assets/images/logo.png')}
         style={styles.logoImage}
@@ -19,40 +32,20 @@ const LoginComponent = ({error, errors, onChange, onSubmit, loading}) => {
       <View>
         <Text style={styles.title}>Welcome to RNContacts</Text>
         <Text style={styles.subTitle}>please login here</Text>
+        {justSignedUp && (
+          <Message
+            onDismiss={() => {}}
+            message="Account created successfully"
+            secondary
+          />
+        )}
         {error && <Message message={error} danger onDismiss={() => {}} />}
-        {/* <Message
-          message="invalid credential"
-          secondary
-          retry
-          retryFn={() => {}}
-          onDismiss={() => {}}
-        />
-        <Message
-          message="invalid credential"
-          primary
-          retry
-          retryFn={() => {}}
-          onDismiss={() => {}}
-        />
-        <Message
-          message="invalid credential"
-          danger
-          retry
-          retryFn={() => {}}
-          onDismiss={() => {}}
-        />
-        <Message
-          message="invalid credential"
-          grey
-          retry
-          retryFn={() => {}}
-          onDismiss={() => {}}
-        /> */}
 
         <Input
           label="Email"
           iconPosition="left"
           placeholder="Enter email"
+          value={form.email}
           onChangeText={value => {
             onChange({name: 'email', value});
           }}
@@ -60,8 +53,23 @@ const LoginComponent = ({error, errors, onChange, onSubmit, loading}) => {
         />
         <Input
           label="Password"
-          icon={<Text>HIDE</Text>}
+          icon={
+            <TouchableOpacity
+              onPress={() => {
+                changeSecure();
+              }}
+            >
+              <Text>
+                {secure ? (
+                  <Icon type="fontAwesome5" name="eye" size={20} />
+                ) : (
+                  <Icon type="fontAwesome5" name="eye-slash" size={20} />
+                )}
+              </Text>
+            </TouchableOpacity>
+          }
           iconPosition="right"
+          secureTextEntry={secure}
           onChangeText={value => {
             onChange({name: 'password', value});
           }}
